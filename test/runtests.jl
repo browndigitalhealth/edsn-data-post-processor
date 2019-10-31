@@ -1,7 +1,6 @@
 include("../src/modules/Constants.jl")
 
 import DataPostProcessor
-
 using .Constants
 using Test
 
@@ -72,24 +71,42 @@ end
     @test_nowarn DataPostProcessor.validate_config(path)
 end
 
-# # TODO
-# @testset "validating config in context of the provided CSV input files" begin
-#     @testset "if a study ID column cannot be found in every provided CSV file" begin
+@testset "validating config in context of the provided CSV input files" begin
+    @testset "exit with error if input file path is not a directory" begin
+        config = pwd() * "/data/config/valid.yaml"
+        input_folder = pwd() * "/data/csv/not a real directory"
+        error_msg = ERROR_INPUT_FOLDER
+        @test_throws ErrorException(error_msg) DataPostProcessor.validate_input_files(config, input_folder)
+    end
 
-#     end
+    @testset "exit with error if a study ID column cannot be found in every provided CSV file" begin
+        config = pwd() * "/data/config/valid.yaml"
+        input_folder = pwd() * "/data/csv/no_subject_id"
+        error_msg = "File `no_subject_id.csv` is missing subject ID `subject_id`"
+        @test_throws ErrorException(error_msg) DataPostProcessor.validate_input_files(config, input_folder)
+    end
 
-#     @testset "if a multiple columns with same name found in CSV files" begin
+    @testset "exit with error if a multiple columns with same name found in CSV files" begin
+        config = pwd() * "/data/config/valid.yaml"
+        input_folder = pwd() * "/data/csv/duplicate_columns"
+        error_msg = "Multiple data columns in the input files found for `input_v1`"
+        @test_throws ErrorException(error_msg) DataPostProcessor.validate_input_files(config, input_folder)
+    end
 
-#     end
+    @testset "warn if config is missing a column that is found in the input files" begin
+        config = pwd() * "/data/config/valid.yaml"
+        input_folder = pwd() * "/data/csv/excess_columns"
+        @test_logs((:warn, "Found data for column `input_v4` but could not find config. Ignoring..."),
+            DataPostProcessor.validate_input_files(config, input_folder))
+    end
 
-#     @testset "if any of the non study ID columns in the CSV files does not have a config" begin
-
-#     end
-
-#     @testset "if a column config is provided that doesn’t match any of the discovered columns" begin
-
-#     end
-# end
+    @testset "warn if config has a column that cannot be found in the input files" begin
+        config = pwd() * "/data/config/valid.yaml"
+        input_folder = pwd() * "/data/csv/missing_columns"
+        @test_logs((:warn, "Found config for column `input_v1` but could not find data. Ignoring..."),
+            DataPostProcessor.validate_input_files(config, input_folder))
+    end
+end
 
 # # TODO
 # @testset "replacing designated missing values with config's missing token" begin

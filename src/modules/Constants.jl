@@ -1,10 +1,11 @@
 module Constants
 
-export ERROR_STRUCTURE_GLOBAL, ERROR_STRUCTURE_COLUMNS, ERROR_REQUIRED_GLOBAL, ERROR_REQUIRED_COLUMN
+export ERROR_STRUCTURE_GLOBAL, ERROR_STRUCTURE_COLUMNS, ERROR_REQUIRED_GLOBAL, ERROR_REQUIRED_COLUMN, ERROR_INPUT_FOLDER
 const ERROR_STRUCTURE_GLOBAL = "Config must provide a dictionary for the `global` key"
 const ERROR_STRUCTURE_COLUMNS = "Config must provide a list of dictionaries for the `columns` key"
 const ERROR_REQUIRED_GLOBAL = "Config `global` key must specify strings for both `missing_token` and `study_id_column_name`"
 const ERROR_REQUIRED_COLUMN = "Each column config must specify strings for both `column_name` and `data_type`"
+const ERROR_INPUT_FOLDER = "Path to passed in folder of input files is not a folder."
 
 export KEY_GLOBAL, KEY_GLOBAL_MISSING, KEY_GLOBAL_STUDY_ID, KEY_COLUMNS, KEY_COLUMN_NAME, KEY_COLUMN_TYPE, KEY_COLUMN_REPLACE_MISSING
 const KEY_GLOBAL = "global"
