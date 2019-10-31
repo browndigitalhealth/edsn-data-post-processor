@@ -1,0 +1,8 @@
+name = "DataPostProcessor"
+uuid = "5c42c880-fb27-11e9-3006-1dae8eb87f97"
+authors = ["Eric Bai <eric@ericbai.com>"]
+version = "0.1.0"
+
+[deps]
+CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
+YAML = "ddb6d928-2868-570f-bddf-ab3f9cf99eb6"

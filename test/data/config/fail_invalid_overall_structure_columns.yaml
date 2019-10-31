@@ -1,0 +1,9 @@
+global:
+  missing_token: "***missing***"
+  study_id_column_name: subject_id
+columns:
+  column_name: "not a list as required"
+  data_type: string
+  replace_with_missing:
+    - 0
+    - -1

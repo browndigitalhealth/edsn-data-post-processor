@@ -1,0 +1,18 @@
+global:
+  missing_token: "***missing***"
+  study_id_column_name: subject_id
+  unknown_global_prop: "hi there!"
+columns:
+  - column_name: input_v1
+    data_type: string
+    replace_with_missing:
+      - 0
+      - -1
+    unknown_column_prop_1: "hi there!"
+  - column_name: input_v2
+    data_type: number
+  - unknown_column_prop_2: "hi there!"
+    column_name: input_v3
+    data_type: string
+    replace_with_missing:
+      - "not applicable"

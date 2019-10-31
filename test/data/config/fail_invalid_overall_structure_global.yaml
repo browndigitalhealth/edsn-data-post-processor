@@ -1,0 +1,13 @@
+global: "not a dict liked required"
+columns:
+  - column_name: input_v1
+    data_type: string
+    replace_with_missing:
+      - 0
+      - -1
+  - column_name: input_v2
+    data_type: number
+  - column_name: input_v3
+    data_type: string
+    replace_with_missing:
+      - "not applicable"

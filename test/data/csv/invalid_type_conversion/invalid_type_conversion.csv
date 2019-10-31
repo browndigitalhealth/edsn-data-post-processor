@@ -1,0 +1,9 @@
+subject_id,input_v2,input_v3
+person 2,2.1,kiki
+person 3,***missing***,yes
+person 4,4.3,***missing***
+person 5,5.4,not applicable
+person 7,cannot convert to number,secure
+person 8,ignored,the
+person 9,88,not applicable
+person 10,10.9,bag
