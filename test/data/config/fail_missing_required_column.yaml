@@ -1,5 +1,6 @@
 global:
   missing_token: "***missing***"
+  invalid_token: "***invalid***"
   study_id_column_name: subject_id
 columns:
   - replace_with_missing:
