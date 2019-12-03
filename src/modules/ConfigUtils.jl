@@ -33,7 +33,7 @@ function check_csv_files(config, input_files_path::AbstractString)
     csv_col_names = DataUtils.find_cols(input_files_path;
         allow_duplicates = true,
         exclude_id_col = id_col) do file_name, col_names
-        if id_col ∉ col_names
+        if !(id_col in col_names)
             error("File `$(file_name)` is missing subject ID column `$(id_col)`")
         end
     end
@@ -112,7 +112,7 @@ end
 
 function warn_unknown_props(config::AbstractDict, known_props::AbstractVector; prefix = "Config")
     foreach(keys(config)) do prop_name
-        if prop_name ∉ known_props
+        if !(prop_name in known_props)
             @warn "$(prefix) has unknown key `$(prop_name)`"
         end
     end

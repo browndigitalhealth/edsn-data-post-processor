@@ -4,7 +4,6 @@ include("Constants.jl")
 include("Utils.jl")
 
 import CSV
-import Parsers
 using .Constants
 
 export find_subjects
@@ -65,7 +64,7 @@ function try_validate_value(val; missing_token, invalid_token, col_config)
     if Utils.get_col_type(col_config) == VALUE_COLUMN_TYPE_STRING
         String(val)
     else # VALUE_COLUMN_TYPE_NUMBER
-        new_val = Parsers.tryparse(Float64, val)
+        new_val = tryparse(Float64, val)
         if isnothing(new_val)
             invalid_token
         elseif isinteger(new_val)
