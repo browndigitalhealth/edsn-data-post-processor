@@ -1,0 +1,9 @@
+subject_id,input_v1,extra_input
+person 1,hello,1
+person 4,you,2
+person 5,doing,3
+person 6,***missing***,4
+person 7,0,5
+person 8,-1,6
+person 9,great,7
+person 10,okay,8

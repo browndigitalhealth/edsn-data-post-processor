@@ -40,6 +40,14 @@ function clean_db_word(word::AbstractString)
     replace(word, INVALID_DB_CHARS => "_")
 end
 
+export clean_db_value
+function clean_db_value(value::AbstractString)
+    replace(value, "'" => "''")
+end
+function clean_db_value(value)
+    value # no-op for non-strings
+end
+
 export csv_row_prop
 function csv_row_prop(row::CSV.Row2, prop_name::AbstractString)
     getproperty(row, Symbol(prop_name))

@@ -28,7 +28,6 @@ function process_data!(config_path::AbstractString, input_files_path::AbstractSt
     id_col = Utils.get_id_col(config)
 
     col_configs::Dict{String, Any} = ConfigUtils.build_col_configs(config)
-    columns = DataUtils.find_cols(input_files_path)
     subjects = DataUtils.find_subjects(input_files_path,
         id_col = id_col,
         missing_token = missing_token) do file_name, num_missing
@@ -37,7 +36,7 @@ function process_data!(config_path::AbstractString, input_files_path::AbstractSt
         end
     end
 
-    DbUtils.with_temp_db(subjects, columns,
+    DbUtils.with_temp_db(subjects, ConfigUtils.build_db_col_names(config),
         id_col = id_col,
         missing_token = missing_token) do db, table_name
         # for each input CSV file

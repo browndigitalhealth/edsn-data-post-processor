@@ -72,8 +72,8 @@ function try_insert_value!(new_val; db::SQLite.DB, table_name::AbstractString,
     if !ismissing(new_val)
         SQLite.execute!(db, """
             UPDATE $(table_name)
-            SET $(Utils.clean_db_word(column)) = '$(new_val)'
-            WHERE $(Utils.clean_db_word(id_col)) = '$(subject)'
+            SET $(Utils.clean_db_word(column)) = '$(Utils.clean_db_value(new_val))'
+            WHERE $(Utils.clean_db_word(id_col)) = '$(Utils.clean_db_value(subject))'
         """)
     end
 end
@@ -92,7 +92,7 @@ function col_def(col_name; missing_token = "", primary = false)
         def *= " PRIMARY KEY"
     end
     if missing_token != ""
-        def *= " DEFAULT '$(missing_token)'"
+        def *= " DEFAULT '$(Utils.clean_db_value(missing_token))'"
     end
     def
 end

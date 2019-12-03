@@ -30,7 +30,7 @@ function check_csv_files(config, input_files_path::AbstractString)
     end
     id_col = Utils.get_id_col(config)
     config_col_names = keys(build_col_configs(config))
-    csv_col_names = DataUtils.find_cols(input_files_path;
+    csv_col_names = DataUtils.find_all_cols(input_files_path;
         allow_duplicates = true,
         exclude_id_col = id_col) do file_name, col_names
         if !(id_col in col_names)
@@ -60,6 +60,11 @@ function build_col_configs(config::AbstractDict)
         col_configs[Utils.get_col_name(col_config)] = col_config
     end
     col_configs
+end
+
+export build_db_col_names
+function build_db_col_names(config::AbstractDict)
+    pushfirst!(collect(keys(build_col_configs(config))), Utils.get_id_col(config))
 end
 
 # Helpers

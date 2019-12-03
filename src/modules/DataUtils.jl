@@ -31,12 +31,9 @@ function find_subjects(fn::Function, input_files_path::AbstractString; id_col::A
     subjects
 end
 
-export find_cols
-function find_cols(input_files_path::AbstractString; exclude_id_col::AbstractString = "")
-    find_cols(FN_NO_OP, input_files_path; exclude_id_col = exclude_id_col)
-end
-function find_cols(fn::Function, input_files_path::AbstractString; allow_duplicates::Bool = false,
-    exclude_id_col::AbstractString = "")
+export find_all_cols
+function find_all_cols(fn::Function, input_files_path::AbstractString; allow_duplicates::Bool,
+    exclude_id_col::AbstractString)
     all_csv_col_names = []
     # collect column names from all CSV files
     Utils.with_csv_file_names(input_files_path) do file_name

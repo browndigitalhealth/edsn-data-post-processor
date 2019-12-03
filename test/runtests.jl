@@ -205,7 +205,7 @@ end
 
     # keep converted value if able to successfully convert
     @test df[!, :input_v3] == [
-        "kiki",
+        "kiki's love", # test handling of single quotes
         "yes",
         "***missing***",
         "***missing***", # replaced with missing
@@ -246,7 +246,7 @@ end
 
 @testset "successfully clean and unify a set of CSV files given valid config" begin
     config = pwd() * "/data/config/valid.yaml"
-    input_folder = pwd() * "/data/csv/valid"
+    input_folder = pwd() * "/data/csv/valid_with_extra_cols"
     output_file = tempname()
 
     DataPostProcessor.process_data!(config, input_folder, output_file)
@@ -255,6 +255,7 @@ end
 
     @test size(df, 1) == 10 # 10 subjects
     @test size(df, 2) == 4 # 4 columns, including the subject id column
+    # extra column excluded from output file
     @test isempty(setdiff(names(df), [:subject_id, :input_v1, :input_v2, :input_v3]))
     @test isempty(setdiff(df.subject_id, [
         "person 1",
