@@ -39,6 +39,7 @@ Each column (input or outcome) except the study ID column needs to have the foll
 * (required) `data_type`: how the data should be transformed, if needed. Must be either string or number
 * If a value cannot be transformed, the script will replace with the specified `invalid_token`
 * (optional) `replace_with_missing`: a list of values to replace with the missing token provided in the global properties
+* (optional) `convert_missing_token_to_value`: convert all instances of the globally-specified missing token to this specified value, this is particularly useful if your query does not return all subjects so that subjects that this column doesn't have data for aren't really missing but rather not represented in the calculation output
 
 ## Sample YAML config
 
@@ -59,4 +60,9 @@ columns:
     data_type: string
     replace_with_missing:
       - "not applicable"
+  - column_name: input_v4
+    data_type: number
+    replace_with_missing:
+      - "n/a"
+    convert_missing_token_to_value: 0
 ```

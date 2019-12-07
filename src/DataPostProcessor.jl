@@ -38,7 +38,8 @@ function process_data!(config_path::AbstractString, input_files_path::AbstractSt
 
     DbUtils.with_temp_db(subjects, ConfigUtils.build_db_col_names(config),
         id_col = id_col,
-        missing_token = missing_token) do db, table_name
+        missing_token = missing_token,
+        col_missing_tokens = ConfigUtils.build_col_missing_tokens(config)) do db, table_name
         # for each input CSV file
         DbUtils.try_start_transaction!(db)
         Utils.with_csv_file_names(input_files_path) do file_name

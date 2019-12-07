@@ -17,3 +17,4 @@ columns:
     data_type: string
     replace_with_missing:
       - "not applicable"
+    convert_missing_token_to_value: "hi"

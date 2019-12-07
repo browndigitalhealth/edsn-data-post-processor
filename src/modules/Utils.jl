@@ -85,4 +85,11 @@ function get_col_replace_missing(col_config::AbstractDict)
         []
 end
 
+export get_col_convert_missing
+function get_col_convert_missing(col_config::AbstractDict)
+    haskey(col_config, KEY_COLUMN_CONVERT_MISSING) ?
+        col_config[KEY_COLUMN_CONVERT_MISSING] :
+        nothing
+end
+
 end # module

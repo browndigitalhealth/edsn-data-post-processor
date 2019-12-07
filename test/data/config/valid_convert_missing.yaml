@@ -1,0 +1,14 @@
+global:
+  missing_token: "***missing***"
+  invalid_token: "***invalid***"
+  study_id_column_name: subject_id
+columns:
+  - column_name: input_v2
+    data_type: number
+    replace_with_missing:
+      - "ignored"
+    convert_missing_token_to_value: -888.2
+  - column_name: input_v3
+    data_type: string
+    replace_with_missing:
+      - "kiki"

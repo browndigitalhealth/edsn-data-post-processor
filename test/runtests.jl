@@ -270,3 +270,63 @@ end
         "person 10",
     ]))
 end
+
+@testset "given a valid config, convert missing token to different value" begin
+    config = pwd() * "/data/config/valid_convert_missing.yaml"
+    input_folder = pwd() * "/data/csv/valid"
+    output_file = tempname()
+
+    DataPostProcessor.process_data!(config, input_folder, output_file)
+
+    df = CSV.read(output_file)
+
+    # 10 subjects because finds all subjects across all specified files
+    @test size(df, 1) == 10
+    @test size(df, 2) == 3 # 3 columns, including the subject id column
+    # extra column excluded from output file
+    @test isempty(setdiff(names(df), [:subject_id, :input_v2, :input_v3]))
+    @test isempty(setdiff(df.subject_id, [
+        "person 1",
+        "person 2",
+        "person 3",
+        "person 4",
+        "person 5",
+        "person 6",
+        "person 7",
+        "person 8",
+        "person 9",
+        "person 10",
+    ]))
+
+    # input2 has no value for person1
+    person1 = filter(row -> row.subject_id == "person 1", df)
+    @test person1.input_v2[1] == -888.2
+    # input2 has pre-existing missing token for person3
+    person3 = filter(row -> row.subject_id == "person 3", df)
+    @test person3.input_v2[1] == -888.2
+    # input2 has no value for person6
+    person6 = filter(row -> row.subject_id == "person 6", df)
+    @test person6.input_v2[1] == -888.2
+    # input2 has value replaced with missing token for person8
+    person8 = filter(row -> row.subject_id == "person 8", df)
+    @test person8.input_v2[1] == -888.2
+    # input2 has existing, non-missing value for for person10
+    person10 = filter(row -> row.subject_id == "person 10", df)
+    @test person10.input_v2[1] == 10.9
+
+    # input3 has no value for person1
+    person1 = filter(row -> row.subject_id == "person 1", df)
+    @test person1.input_v3[1] == "***missing***"
+    # input3 has value replaced with missing token for person2
+    person2 = filter(row -> row.subject_id == "person 2", df)
+    @test person2.input_v3[1] == "***missing***"
+    # input3 has pre-existing missing token for person4
+    person4 = filter(row -> row.subject_id == "person 4", df)
+    @test person4.input_v3[1] == "***missing***"
+    # input3 has no value for person6
+    person6 = filter(row -> row.subject_id == "person 6", df)
+    @test person6.input_v3[1] == "***missing***"
+    # input3 has existing, non-missing value for for person10
+    person10 = filter(row -> row.subject_id == "person 10", df)
+    @test person10.input_v3[1] == "bag"
+end

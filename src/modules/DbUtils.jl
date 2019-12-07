@@ -9,7 +9,8 @@ const TABLE_NAME = "temp_table"
 
 export with_temp_db
 function with_temp_db(fn::Function, subjects::AbstractVector, columns::AbstractVector;
-        id_col::AbstractString, missing_token::AbstractString)
+        id_col::AbstractString, missing_token::AbstractString,
+        col_missing_tokens::AbstractDict{String, Any})
 
     # DO NOT create an in-memory SQLite database because the data may be too large for memory
     temp_name = tempname()
@@ -23,7 +24,7 @@ function with_temp_db(fn::Function, subjects::AbstractVector, columns::AbstractV
         for col_name in uniq_columns
             push!(col_defs, col_def(col_name,
                 primary = (col_name == id_col),
-                missing_token = missing_token))
+                missing_token = get(col_missing_tokens, col_name, missing_token)))
         end
         SQLite.execute!(db, "CREATE TABLE $(TABLE_NAME) ($(join(col_defs, ", ")))")
 

@@ -16,8 +16,17 @@ end
 export check_warn_conditions
 function check_warn_conditions(config)
     check_required_structure(config)
-    warn_unknown_props(config[KEY_GLOBAL], [KEY_GLOBAL_MISSING, KEY_GLOBAL_INVALID, KEY_GLOBAL_STUDY_ID])
-    known_col_props = [KEY_COLUMN_NAME, KEY_COLUMN_TYPE, KEY_COLUMN_REPLACE_MISSING]
+    warn_unknown_props(config[KEY_GLOBAL], [
+        KEY_GLOBAL_MISSING,
+        KEY_GLOBAL_INVALID,
+        KEY_GLOBAL_STUDY_ID,
+    ])
+    known_col_props = [
+        KEY_COLUMN_NAME,
+        KEY_COLUMN_TYPE,
+        KEY_COLUMN_REPLACE_MISSING,
+        KEY_COLUMN_CONVERT_MISSING,
+    ]
     foreach(config[KEY_COLUMNS]) do col_config
         warn_unknown_props(col_config, known_col_props, prefix = "Config for column `$(Utils.get_col_name(col_config))`")
     end
@@ -65,6 +74,18 @@ end
 export build_db_col_names
 function build_db_col_names(config::AbstractDict)
     pushfirst!(collect(keys(build_col_configs(config))), Utils.get_id_col(config))
+end
+
+export build_col_missing_tokens
+function build_col_missing_tokens(config::AbstractDict)
+    col_missing_tokens::Dict{String, Any} = Dict()
+    for col_config in config[KEY_COLUMNS]
+        col_token = Utils.get_col_convert_missing(col_config)
+        if !isnothing(col_token)
+            col_missing_tokens[Utils.get_col_name(col_config)] = col_token
+        end
+    end
+    col_missing_tokens
 end
 
 # Helpers
