@@ -7,12 +7,16 @@ export ERROR_STRUCTURE_GLOBAL,
     ERROR_STRUCTURE_COLUMNS,
     ERROR_REQUIRED_GLOBAL,
     ERROR_REQUIRED_COLUMN,
-    ERROR_INPUT_FOLDER
+    ERROR_INPUT_FOLDER,
+    ERROR_FILTER_WRONG_COLUMN_NAME,
+    ERROR_FILTER_MISSING_VALUES
 const ERROR_STRUCTURE_GLOBAL = "Config must provide a dictionary for the `global` key"
 const ERROR_STRUCTURE_COLUMNS = "Config must provide a list of dictionaries for the `columns` key"
 const ERROR_REQUIRED_GLOBAL = "Config `global` key must specify strings for `missing_token`, `invalid_token`, and `study_id_column_name`"
 const ERROR_REQUIRED_COLUMN = "Each column config must specify strings for both `column_name` and `data_type`"
 const ERROR_INPUT_FOLDER = "Path to passed in folder of input files is not a folder."
+const ERROR_FILTER_WRONG_COLUMN_NAME = "File to filter subjects by must contain the same `study_id_column_name` as specified in the config"
+const ERROR_FILTER_MISSING_VALUES = "File to filter subjects by must NOT contain any missing values as specified in the config"
 
 export KEY_GLOBAL,
     KEY_GLOBAL_MISSING,

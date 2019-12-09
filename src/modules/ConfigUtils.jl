@@ -41,7 +41,7 @@ function check_csv_files(config, input_files_path::AbstractString)
     config_col_names = keys(build_col_configs(config))
     csv_col_names = DataUtils.find_all_cols(input_files_path;
         allow_duplicates = true,
-        exclude_id_col = id_col) do file_name, col_names
+        exclude_id_col_on_return = id_col) do file_name, col_names
         if !(id_col in col_names)
             error("File `$(file_name)` is missing subject ID column `$(id_col)`")
         end

@@ -330,3 +330,49 @@ end
     person10 = filter(row -> row.subject_id == "person 10", df)
     @test person10.input_v3[1] == "bag"
 end
+
+@testset "specifying subject ids to filter output by" begin
+    @testset "subject ids to filter by must have matching `study_id_column_name`" begin
+        config = pwd() * "/data/config/valid.yaml"
+        input_folder = pwd() * "/data/csv/valid"
+        filter_file = pwd() * "/data/filter/wrong_column_name.csv"
+        output_file = tempname()
+        error_msg = ERROR_FILTER_WRONG_COLUMN_NAME
+
+        @test_throws ErrorException(error_msg) DataPostProcessor.process_data!(config, input_folder, output_file,
+            filter_subjects_file = filter_file)
+    end
+
+    @testset "subject ids to filter by must not have any missing values" begin
+        config = pwd() * "/data/config/valid.yaml"
+        input_folder = pwd() * "/data/csv/valid"
+        filter_file = pwd() * "/data/filter/some_missing.csv"
+        output_file = tempname()
+        error_msg = ERROR_FILTER_MISSING_VALUES
+
+        @test_throws ErrorException(error_msg) DataPostProcessor.process_data!(config, input_folder, output_file,
+            filter_subjects_file = filter_file)
+    end
+
+    @testset "can ensure output only has specified subject ids" begin
+        config = pwd() * "/data/config/valid.yaml"
+        input_folder = pwd() * "/data/csv/valid"
+        filter_file = pwd() * "/data/filter/valid.csv"
+        output_file = tempname()
+
+        DataPostProcessor.process_data!(config, input_folder, output_file,
+            filter_subjects_file = filter_file)
+
+        df = CSV.read(output_file)
+
+        # only the subject ids listed in the filter file are shown in the output
+        @test size(df, 1) == 5
+        @test isempty(setdiff(df.subject_id, [
+            "person 1",
+            "person 2",
+            "person 3",
+            "person 4",
+            "person 5",
+        ]))
+    end
+end

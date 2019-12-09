@@ -20,7 +20,8 @@ function validate_inputs(config_path::AbstractString, input_files_path::Abstract
 end
 
 export process_data!
-function process_data!(config_path::AbstractString, input_files_path::AbstractString, output_path::AbstractString)
+function process_data!(config_path::AbstractString, input_files_path::AbstractString,
+    output_path::AbstractString; filter_subjects_file::Union{AbstractString, Nothing} = nothing)
     config = validate_inputs(config_path, input_files_path)
 
     missing_token = Utils.get_missing_token(config)
@@ -28,11 +29,16 @@ function process_data!(config_path::AbstractString, input_files_path::AbstractSt
     id_col = Utils.get_id_col(config)
 
     col_configs::Dict{String, Any} = ConfigUtils.build_col_configs(config)
-    subjects = DataUtils.find_subjects(input_files_path,
-        id_col = id_col,
-        missing_token = missing_token) do file_name, num_missing
+    subjects = DataUtils.find_subjects(id_col = id_col,
+        missing_token = missing_token,
+        input_files_path = input_files_path,
+        filter_subjects_file = filter_subjects_file) do file_name, num_missing
         if num_missing > 0
-            error("File `$(file_name)` has $(num_missing) missing value(s). All subject IDs must be present.")
+            if file_name == filter_subjects_file
+                error(ERROR_FILTER_MISSING_VALUES)
+            else
+                error("File `$(file_name)` has $(num_missing) missing value(s). All subject IDs must be present.")
+            end
         end
     end
 
